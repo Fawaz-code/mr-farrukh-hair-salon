@@ -1,34 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { ReactNode } from 'react';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
+import { CustomCursor } from './CustomCursor';
 import { FloatingElements } from './FloatingElements';
 
-export function PageLayout({ children }: { children: React.ReactNode }) {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
-
+export function PageLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen flex flex-col relative selection:bg-primary/30 selection:text-primary-foreground overflow-x-hidden">
-      {/* Top Progress Bar */}
-      <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-primary z-50 origin-left"
-        style={{ scaleX }}
-      />
-      
+    <div className="min-h-[100dvh] flex flex-col relative selection:bg-primary selection:text-white bg-background overflow-x-hidden">
+      <CustomCursor />
       <Navbar />
-      
-      <main className="flex-grow flex flex-col">
+      <main className="flex-1 flex flex-col w-full">
         {children}
       </main>
-
-      <Footer />
-      
       <FloatingElements />
+      <Footer />
     </div>
   );
 }

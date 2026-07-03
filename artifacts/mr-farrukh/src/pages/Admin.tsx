@@ -1,174 +1,196 @@
 import { useState } from 'react';
-import { useListAppointments, useListContactMessages, useUpdateAppointment, useDeleteAppointment } from '@workspace/api-client-react';
-import { Calendar, MessageSquare, Users, Image as ImageIcon, LayoutDashboard, Search, Trash2, Edit } from 'lucide-react';
-import { format } from 'date-fns';
-import { useToast } from '@/hooks/use-toast';
+import { useListPricing, useListAppointments, useListServices, useListGallery, useListStaff, useListContactMessages } from '@workspace/api-client-react';
+import { motion } from 'framer-motion';
+
+const TABS = ['Appointments', 'Services', 'Pricing', 'Gallery', 'Staff', 'Messages'];
 
 export default function Admin() {
-  const [activeTab, setActiveTab] = useState('Appointments');
-  const { toast } = useToast();
-
-  const { data: appointments, refetch: refetchAppts } = useListAppointments({ query: { queryKey: ['appointments'] } });
-  const { data: messages } = useListContactMessages({ query: { queryKey: ['messages'] } });
-
-  const updateAppointment = useUpdateAppointment();
-  const deleteAppointment = useDeleteAppointment();
-
-  const handleStatusChange = async (id: number, status: string) => {
-    try {
-      await updateAppointment.mutateAsync({ id, data: { status } });
-      refetchAppts();
-      toast({ title: 'Status updated successfully' });
-    } catch (e) {
-      toast({ title: 'Error updating status', variant: 'destructive' });
-    }
-  };
-
-  const handleDelete = async (id: number) => {
-    if(!confirm('Are you sure you want to delete this appointment?')) return;
-    try {
-      await deleteAppointment.mutateAsync({ id });
-      refetchAppts();
-      toast({ title: 'Appointment deleted' });
-    } catch(e) {
-      toast({ title: 'Error deleting', variant: 'destructive' });
-    }
-  };
-
-  const tabs = [
-    { name: 'Appointments', icon: Calendar },
-    { name: 'Messages', icon: MessageSquare },
-    { name: 'Services', icon: LayoutDashboard },
-    { name: 'Staff', icon: Users },
-    { name: 'Gallery', icon: ImageIcon },
-  ];
-
-  const renderContent = () => {
-    switch(activeTab) {
-      case 'Appointments':
-        return (
-          <div className="bg-[#111] border border-white/10 rounded-lg overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm text-muted-foreground">
-                <thead className="bg-[#1A1A1A] text-white uppercase tracking-widest text-[10px]">
-                  <tr>
-                    <th className="p-4">Date/Time</th>
-                    <th className="p-4">Client</th>
-                    <th className="p-4">Service</th>
-                    <th className="p-4">Status</th>
-                    <th className="p-4">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                  {appointments?.map(apt => (
-                    <tr key={apt.id} className="hover:bg-[#1A1A1A]/50">
-                      <td className="p-4">
-                        <div className="text-white font-medium">{apt.date}</div>
-                        <div className="text-xs">{apt.time}</div>
-                      </td>
-                      <td className="p-4">
-                        <div className="text-white">{apt.name}</div>
-                        <div className="text-xs">{apt.phone}</div>
-                      </td>
-                      <td className="p-4">
-                        <div className="text-primary">{apt.service}</div>
-                        <div className="text-xs">{apt.stylist || 'Any'}</div>
-                      </td>
-                      <td className="p-4">
-                        <select 
-                          value={apt.status} 
-                          onChange={(e) => handleStatusChange(apt.id, e.target.value)}
-                          className={`text-xs uppercase font-bold tracking-wider bg-transparent outline-none cursor-pointer ${
-                            apt.status === 'pending' ? 'text-yellow-500' :
-                            apt.status === 'confirmed' ? 'text-green-500' : 'text-red-500'
-                          }`}
-                        >
-                          <option value="pending" className="bg-black text-white">Pending</option>
-                          <option value="confirmed" className="bg-black text-white">Confirmed</option>
-                          <option value="cancelled" className="bg-black text-white">Cancelled</option>
-                        </select>
-                      </td>
-                      <td className="p-4">
-                        <button onClick={() => handleDelete(apt.id)} className="text-red-500 hover:text-red-400 p-2">
-                          <Trash2 size={16} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                  {!appointments?.length && (
-                    <tr><td colSpan={5} className="p-8 text-center">No appointments found</td></tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        );
-      case 'Messages':
-        return (
-          <div className="grid gap-4">
-            {messages?.map(msg => (
-              <div key={msg.id} className="bg-[#111] border border-white/10 p-6 rounded-lg flex flex-col md:flex-row gap-6">
-                <div className="md:w-1/4 shrink-0">
-                  <div className="text-white font-bold mb-1">{msg.name}</div>
-                  <div className="text-xs text-muted-foreground mb-1">{msg.phone}</div>
-                  <div className="text-xs text-primary uppercase tracking-widest">{msg.service || 'General Inquiry'}</div>
-                  <div className="text-[10px] mt-4">{format(new Date(msg.createdAt), 'MMM d, yyyy h:mm a')}</div>
-                </div>
-                <div className="flex-grow">
-                  <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.message}</p>
-                </div>
-              </div>
-            ))}
-            {!messages?.length && <div className="p-8 text-center bg-[#111] border border-white/10 rounded-lg">No messages found</div>}
-          </div>
-        );
-      default:
-        return (
-          <div className="bg-[#111] border border-white/10 border-dashed rounded-lg p-12 text-center flex flex-col items-center justify-center">
-            <LayoutDashboard size={48} className="text-primary/20 mb-4" />
-            <h3 className="text-xl text-white mb-2">Management for {activeTab}</h3>
-            <p className="text-muted-foreground text-sm">This module is part of the full CMS integration phase.</p>
-          </div>
-        );
-    }
-  };
+  const [activeTab, setActiveTab] = useState(TABS[0]);
 
   return (
-    <div className="w-full pt-32 pb-24 bg-black min-h-screen">
-      <div className="container mx-auto px-4 md:px-8 max-w-6xl">
-        <div className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <div>
-            <h1 className="font-serif text-3xl md:text-4xl text-white font-bold mb-2">Command Center</h1>
-            <p className="text-primary text-xs uppercase tracking-widest">Admin Dashboard</p>
-          </div>
-        </div>
+    <div className="pt-40 pb-24 px-6 max-w-7xl mx-auto w-full min-h-screen">
+      <div className="mb-12 border-b border-white/10 flex overflow-x-auto hide-scrollbar gap-8">
+        {TABS.map(tab => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`pb-4 text-xs font-bold tracking-widest uppercase whitespace-nowrap transition-colors relative ${activeTab === tab ? 'text-primary' : 'text-secondary hover:text-foreground'}`}
+          >
+            {tab}
+            {activeTab === tab && (
+              <motion.div layoutId="admin-tab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+            )}
+          </button>
+        ))}
+      </div>
 
-        <div className="grid md:grid-cols-[240px_1fr] gap-8">
-          {/* Sidebar */}
-          <div className="bg-[#111] border border-white/10 p-4 rounded-lg h-max">
-            <nav className="space-y-1">
-              {tabs.map(tab => (
-                <button
-                  key={tab.name}
-                  onClick={() => setActiveTab(tab.name)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 text-sm rounded-md transition-colors ${
-                    activeTab === tab.name 
-                      ? 'bg-primary text-black font-semibold' 
-                      : 'text-muted-foreground hover:bg-[#1A1A1A] hover:text-white'
-                  }`}
-                >
-                  <tab.icon size={18} />
-                  {tab.name}
-                </button>
-              ))}
-            </nav>
-          </div>
+      <div className="glass-panel rounded-[2rem] p-10 min-h-[600px] border border-white/10 shadow-2xl">
+        {activeTab === 'Appointments' && <AppointmentsTab />}
+        {activeTab === 'Services' && <ServicesTab />}
+        {activeTab === 'Pricing' && <PricingTab />}
+        {activeTab === 'Gallery' && <GalleryTab />}
+        {activeTab === 'Staff' && <StaffTab />}
+        {activeTab === 'Messages' && <MessagesTab />}
+      </div>
+    </div>
+  );
+}
 
-          {/* Content */}
-          <div>
-            {renderContent()}
+function AppointmentsTab() {
+  const { data } = useListAppointments();
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <h2 className="font-serif text-3xl text-foreground">Recent Appointments</h2>
+      </div>
+      <div className="grid gap-4">
+        {data?.map(app => (
+          <div key={app.id} className="p-6 bg-white/5 border border-white/10 rounded-2xl flex justify-between items-center hover:bg-white/10 transition-colors">
+            <div>
+              <p className="font-serif text-xl text-foreground mb-1">{app.name}</p>
+              <p className="text-sm text-secondary font-light">{app.date} at {app.time} — <span className="text-primary">{app.phone}</span></p>
+            </div>
+            <div className="text-right">
+              <span className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest ${app.status === 'confirmed' ? 'bg-emerald-500/20 text-emerald-500 border border-emerald-500/30' : 'bg-primary/20 text-primary border border-primary/30'}`}>
+                {app.status}
+              </span>
+            </div>
           </div>
-        </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ServicesTab() {
+  const { data } = useListServices();
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <h2 className="font-serif text-3xl text-foreground">Manage Services</h2>
+        <button className="bg-primary text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest">Add Service</button>
+      </div>
+      <div className="grid gap-4">
+        {data?.map(s => (
+          <div key={s.id} className="p-6 bg-white/5 border border-white/10 rounded-2xl flex justify-between items-center hover:bg-white/10 transition-colors">
+            <div className="flex gap-6 items-center">
+              <div className="w-16 h-16 rounded-xl overflow-hidden bg-black/50">
+                <img src={s.imageUrl ?? undefined} alt="" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <span className="font-serif text-xl text-foreground block mb-1">{s.name}</span>
+                <span className="text-xs font-bold uppercase tracking-widest text-primary">{s.category}</span>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <button className="text-secondary hover:text-foreground text-sm">Edit</button>
+              <button className="text-destructive hover:text-red-400 text-sm">Delete</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PricingTab() {
+  const { data } = useListPricing();
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <h2 className="font-serif text-3xl text-foreground">Manage Pricing</h2>
+        <button className="bg-primary text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest">Add Item</button>
+      </div>
+      <div className="grid gap-4">
+        {data?.map(p => (
+          <div key={p.id} className="p-6 bg-white/5 border border-white/10 rounded-2xl flex justify-between items-center hover:bg-white/10 transition-colors">
+            <div>
+              <span className="font-serif text-xl text-foreground block mb-1">{p.name} {p.popular && <span className="text-xs ml-2 text-primary uppercase font-sans">★ Popular</span>}</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-secondary">{p.category}</span>
+            </div>
+            <div className="flex items-center gap-8">
+              <span className="font-serif text-2xl text-foreground">PKR {p.price.toLocaleString()}</span>
+              <div className="flex gap-3">
+                <button className="text-secondary hover:text-foreground text-sm">Edit</button>
+                <button className="text-destructive hover:text-red-400 text-sm">Delete</button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function GalleryTab() {
+  const { data } = useListGallery();
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <h2 className="font-serif text-3xl text-foreground">Manage Gallery</h2>
+        <button className="bg-primary text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest">Upload</button>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {data?.map(g => (
+          <div key={g.id} className="aspect-square bg-white/5 rounded-2xl overflow-hidden border border-white/10 relative group">
+            <img src={g.imageUrl} className="w-full h-full object-cover" alt="Gallery" />
+            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+               <button className="text-white hover:text-primary text-sm font-bold uppercase tracking-widest">Edit</button>
+               <button className="text-destructive hover:text-red-400 text-sm font-bold uppercase tracking-widest">Delete</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function StaffTab() {
+  const { data } = useListStaff();
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <h2 className="font-serif text-3xl text-foreground">Manage Staff</h2>
+        <button className="bg-primary text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest">Add Member</button>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {data?.map(s => (
+          <div key={s.id} className="p-6 bg-white/5 border border-white/10 rounded-2xl flex gap-6 items-center hover:bg-white/10 transition-colors">
+            <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white/10">
+              <img src={s.imageUrl ?? undefined} alt="" className="w-full h-full object-cover" />
+            </div>
+            <div className="flex-1">
+              <span className="font-serif text-xl text-foreground block mb-1">{s.name}</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-primary">{s.role}</span>
+            </div>
+            <div className="flex gap-3">
+               <button className="text-secondary hover:text-foreground text-sm">Edit</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MessagesTab() {
+  const { data } = useListContactMessages();
+  return (
+    <div className="space-y-8">
+      <h2 className="font-serif text-3xl text-foreground">Contact Messages</h2>
+      <div className="grid gap-6">
+        {data?.map(m => (
+          <div key={m.id} className="p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors">
+            <div className="flex justify-between items-start mb-6 border-b border-white/10 pb-4">
+              <div>
+                <span className="font-serif text-xl text-foreground block mb-1">{m.name}</span>
+                <span className="text-sm text-primary">{m.email} • {m.phone}</span>
+              </div>
+              <span className="text-xs font-bold tracking-widest uppercase text-secondary bg-white/5 px-3 py-1 rounded-full">{new Date(m.createdAt).toLocaleDateString()}</span>
+            </div>
+            <p className="text-secondary leading-relaxed font-light">{m.message}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

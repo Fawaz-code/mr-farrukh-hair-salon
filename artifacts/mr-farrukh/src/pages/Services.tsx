@@ -1,101 +1,67 @@
 import { motion } from 'framer-motion';
 import { useListServices } from '@workspace/api-client-react';
 import { Link } from 'wouter';
-import { Clock, ChevronRight } from 'lucide-react';
 
 export default function Services() {
-  const { data: services, isLoading } = useListServices({ query: { queryKey: ['services'] } });
+  const { data: services, isLoading } = useListServices();
 
-  const categories = ['Hair Services', 'Facials', 'Massage', 'Wax', 'Nail Care', 'Party Grooming'];
-
-  const getServicesByCategory = (cat: string) => {
-    if (!services) return [];
-    return services.filter(s => s.category.toLowerCase() === cat.toLowerCase());
-  };
+  const categories = Array.from(new Set(services?.map(s => s.category) || []));
 
   return (
-    <div className="w-full pt-32 pb-24 bg-black min-h-screen">
-      <div className="container mx-auto px-4 md:px-8">
-        <div className="text-center mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <h1 className="font-serif text-5xl md:text-6xl text-white font-bold mb-6">Our Services</h1>
-            <p className="text-muted-foreground text-sm uppercase tracking-[0.2em] max-w-2xl mx-auto leading-relaxed">
-              Curated treatments for the modern gentleman and lady. Masterful execution, imported products, complete relaxation.
-            </p>
-          </motion.div>
+    <div className="pt-40 pb-24 px-6 max-w-7xl mx-auto w-full min-h-screen">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center max-w-3xl mx-auto mb-24"
+      >
+        <h1 className="font-serif text-5xl md:text-7xl mb-6">Our Services</h1>
+        <p className="text-secondary text-lg font-light">Curated treatments delivered with uncompromising precision and care.</p>
+      </motion.div>
+
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="h-96 bg-card rounded-3xl animate-pulse" />
+          ))}
         </div>
-
-        {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1,2,3,4,5,6].map(i => (
-              <div key={i} className="h-64 bg-[#111] animate-pulse border border-primary/10 rounded-sm"></div>
-            ))}
-          </div>
-        ) : (
-          <div className="space-y-32">
-            {categories.map((cat, i) => {
-              const catServices = getServicesByCategory(cat);
-              if (catServices.length === 0 && cat !== 'Party Grooming') {
-                // If API is empty, show some dummy placeholders matching the prompt
-                const dummies = cat === 'Hair Services' 
-                  ? ['Hair Cut', 'Hair Styling', 'Beard Cleansing', 'Keratin']
-                  : cat === 'Facials' ? ['Hydra Facial', 'Dermaclear'] : ['Signature Treatment'];
-                
-                catServices.push(...dummies.map((name, id) => ({
-                  id, name, category: cat, description: 'Experience the ultimate luxury treatment tailored precisely to your needs.', duration: '45 mins'
-                })) as any);
-              }
-
-              return (
-                <motion.div 
-                  key={cat}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                >
-                  <div className="flex items-center gap-6 mb-12">
-                    <h2 className="font-serif text-3xl md:text-4xl text-white">{cat}</h2>
-                    <div className="h-[1px] bg-primary/30 flex-grow"></div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {catServices.map((service, j) => (
-                      <motion.div
-                        key={service.id || j}
-                        whileHover={{ y: -5 }}
-                        className="group bg-[#0A0A0A] border border-primary/10 p-6 relative overflow-hidden flex flex-col h-full hover:border-primary/50 transition-all hover:shadow-[0_0_30px_rgba(201,168,76,0.1)]"
-                      >
-                        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
-                          <span className="font-serif text-8xl text-primary font-bold">{j + 1}</span>
-                        </div>
-                        
-                        <h3 className="font-serif text-xl text-white mb-3 relative z-10">{service.name}</h3>
-                        <p className="text-muted-foreground text-sm mb-6 flex-grow relative z-10">
-                          {service.description || 'Premium treatment using imported luxury products for flawless results.'}
-                        </p>
-                        
-                        <div className="flex items-center justify-between mt-auto pt-4 border-t border-white/5 relative z-10">
-                          {service.duration && (
-                            <span className="flex items-center gap-2 text-xs text-muted-foreground uppercase tracking-widest">
-                              <Clock size={14} className="text-primary" /> {service.duration}
-                            </span>
-                          )}
-                          <Link href={`/book?service=${encodeURIComponent(service.name)}`} className="text-primary text-xs uppercase tracking-widest font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
-                            Book <ChevronRight size={14} />
-                          </Link>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        )}
-      </div>
+      ) : (
+        <div className="space-y-32">
+          {categories.map((category) => (
+            <div key={category}>
+              <h2 className="font-serif text-4xl mb-12 border-b border-white/10 pb-6 text-foreground">{category}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {services?.filter(s => s.category === category).map((service, i) => (
+                  <motion.div
+                    key={service.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: (i % 3) * 0.1 }}
+                    className="glass-panel rounded-3xl p-8 flex flex-col group hover:border-primary/50 transition-colors"
+                  >
+                    <div className="h-56 rounded-2xl overflow-hidden mb-8 relative">
+                      <div className="absolute inset-0 bg-primary/20 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <img 
+                        src={service.imageUrl || "https://images.unsplash.com/photo-1620331311520-24c4d245d104?q=80&w=800"} 
+                        alt={service.name} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
+                    </div>
+                    <h3 className="font-serif text-2xl mb-4 text-foreground">{service.name}</h3>
+                    <p className="text-secondary text-sm flex-1 mb-8 leading-relaxed font-light">{service.description}</p>
+                    <div className="flex justify-between items-center mt-auto pt-6 border-t border-white/10">
+                      <span className="text-lg font-medium text-foreground">{service.category}</span>
+                      <Link href={`/book?service=${service.id}`} className="text-primary text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors">
+                        Book Now
+                      </Link>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

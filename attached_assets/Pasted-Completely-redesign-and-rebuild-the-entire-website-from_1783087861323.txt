@@ -1,0 +1,312 @@
+Completely redesign and rebuild the entire website from scratch.
+
+Do NOT modify the existing UI.
+
+Do NOT reuse the current layouts.
+
+Do NOT reuse the existing color palette.
+
+Do NOT reuse existing cards.
+
+Think like an award-winning UI/UX designer and build a completely fresh, premium luxury salon website.
+
+The final result should NOT look AI-generated or template-based.
+
+The website should look like it was designed by a top international creative agency.
+
+The design quality should be comparable to Apple, Dior, Aesop, Dyson Beauty, Toni & Guy and modern luxury lifestyle brands.
+
+------------------------------------------------------------
+
+MOST IMPORTANT TASK
+
+Use the uploaded price list image as the SINGLE SOURCE OF TRUTH.
+
+Carefully extract every category.
+
+Carefully extract every service.
+
+Carefully extract every price.
+
+DO NOT simply display the uploaded image.
+
+Instead create beautiful premium pricing sections using modern UI cards.
+
+Every category should have its own beautifully designed section.
+
+Every service should be displayed with elegant spacing, icons, hover effects, animations and premium typography.
+
+------------------------------------------------------------
+
+The categories MUST include exactly the services shown in the uploaded image.
+
+Create separate premium sections for:
+
+HAIR
+
+• Haircut
+• Regular Hair Cut (Wash & Styling) — Rs.1300
+• Kids Hair Cut — Rs.700
+
+STYLES
+
+• Regular Styling — Rs.500
+• Fiber Styling — Rs.500
+• Hair-Do — Rs.500
+
+BEARD
+
+• Beard — Rs.700
+• Beard (Cleansing & Scrubbing) — Rs.1500
+
+BEARD COLORING
+
+• Keune — Rs.1500
+• L'Oréal — Rs.1500
+• Just For Men — Rs.1500
+
+TREATMENTS
+
+• Protein Dose — Rs.3000
+• Dandruff Control — Rs.3000
+• Shine Enhance — Rs.3500
+
+TEXTURE SERVICES
+
+• Long Hair Botox — Rs.18000
+• Top Hair Botox — Rs.10000
+• Long Hair Keratin — Rs.18000
+• Top Hair Keratin — Rs.10000
+
+PERM SERVICES
+
+• Long Hair Perming — Rs.12000
+• Top Hair Perming — Rs.8000
+
+HAIR COLORING
+
+• Revlon — Rs.2000
+• G.K — Rs.2000
+• Olivia — Rs.1200
+• Adore — Rs.1200
+• Garnier — Rs.2000
+• L'Oréal — Rs.2000
+• Just For Men — Rs.2500
+• Apple — Rs.2000
+• Keune — Rs.2500
+
+------------------------------------------------------------
+
+SKINS
+
+FACIALS
+
+• Hydra Facial — Rs.12000
+• HI Lift — Rs.5000
+• Dr. Derma — Rs.7000
+• Thalgo — Rs.8000
+• Janssen — Rs.10000
+• Dermaclear Medicated — Rs.8000
+• Skin Care — Rs.4000
+• Dermacos — Rs.7000
+
+POLISHER
+
+• Face — Rs.1000
+• Arms — Rs.1500
+• Hands — Rs.1000
+• Feet — Rs.2000
+• Neck — Rs.1000
+• Black Mask — Rs.500
+• Mud Mask — Rs.500
+
+MASSAGE
+
+• Head — Rs.500
+• Shoulder — Rs.500
+• Back — Rs.500
+• Full Upper — Rs.1000
+
+NAIL CARE
+
+• Manicure / Pedicure — Rs.5000
+
+GROOMING
+
+• Party Grooming (Cleansing & Scrubbing) — Rs.4000
+
+WAX
+
+• Cheeks — Rs.500
+• Forehead — Rs.500
+• Ear — Rs.500
+• Neck — Rs.1000
+• Full Face Wax — Rs.1000
+
+------------------------------------------------------------
+
+UI REQUIREMENTS
+
+Completely redesign the interface.
+
+Create world-class luxury UI.
+
+Avoid generic AI layouts.
+
+Avoid common salon templates.
+
+Avoid boring sections.
+
+Avoid black & gold themes completely.
+
+Choose a fresh premium luxury palette.
+
+Suggested palette:
+
+Deep Navy
+
+Royal Blue
+
+Slate Gray
+
+Ivory
+
+Champagne White
+
+Soft Silver
+
+Emerald accents
+
+Glassmorphism
+
+Premium gradients
+
+Luxury shadows
+
+Soft blur effects
+
+Beautiful border radius
+
+Premium typography
+
+------------------------------------------------------------
+
+Pricing Section
+
+Do NOT use tables.
+
+Instead create:
+
+Luxury Pricing Cards
+
+Accordion Categories
+
+Animated Service Cards
+
+Search Bar
+
+Category Filters
+
+Smooth Expand/Collapse
+
+Hover Animations
+
+Booking Button beside every service
+
+------------------------------------------------------------
+
+Homepage
+
+Luxury Hero
+
+Professional salon photography
+
+Video background
+
+Modern typography
+
+Premium CTA
+
+Book Appointment
+
+WhatsApp Booking
+
+Explore Services
+
+------------------------------------------------------------
+
+Animations
+
+GSAP
+
+Framer Motion
+
+Micro Interactions
+
+Luxury Hover Effects
+
+Magnetic Buttons
+
+Smooth Scroll
+
+Page Transitions
+
+Animated Counters
+
+Floating Elements
+
+------------------------------------------------------------
+
+Booking
+
+Fully working booking portal.
+
+Customer selects
+
+Service
+
+Date
+
+Time
+
+Phone
+
+Notes
+
+Confirmation
+
+WhatsApp Integration
+
+WhatsApp Number
+
++92 347 7268791
+
+Automatically generate booking message.
+
+------------------------------------------------------------
+
+Location
+
+Ground Floor
+
+Winston Mall
+
+D-Block
+
+B-17
+
+Islamabad
+
+Embed beautiful Google Maps.
+
+------------------------------------------------------------
+
+Contact Numbers
+
+0320-5814165
+
+0347-7268791
+
+------------------------------------------------------------
+
+The final website should look like a premium luxury salon website worth $15,000+, with every page handcrafted, fully responsive, visually stunning, and every feature completely functional. The UI should feel unique, modern, elegant, and custom-designed rather than AI-generated.

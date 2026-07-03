@@ -1,246 +1,212 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useCreateAppointment } from '@workspace/api-client-react';
-import { Calendar, Check, ChevronRight, Clock, User, Scissors } from 'lucide-react';
-import { format, addDays } from 'date-fns';
-
-const formSchema = z.object({
-  service: z.string().min(1, 'Please select a service'),
-  stylist: z.string().optional(),
-  date: z.string().min(1, 'Please select a date'),
-  time: z.string().min(1, 'Please select a time'),
-  name: z.string().min(2, 'Name is required'),
-  phone: z.string().min(10, 'Valid phone number required'),
-  email: z.string().email().optional().or(z.literal('')),
-  notes: z.string().optional()
-});
+import { useCreateAppointment, useListServices } from '@workspace/api-client-react';
+import { CheckCircle2, ChevronRight, Calendar, Clock, User } from 'lucide-react';
 
 export default function Book() {
   const [step, setStep] = useState(1);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const { data: services } = useListServices();
   const createAppointment = useCreateAppointment();
-
-  // URL params logic if any
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const s = params.get('service');
-    if (s) {
-      form.setValue('service', s);
-    }
-  }, []);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      service: '',
-      stylist: 'Any Stylist',
-      date: format(new Date(), 'yyyy-MM-dd'),
-      time: '',
-      name: '',
-      phone: '',
-      email: '',
-      notes: ''
-    }
+  
+  const [formData, setFormData] = useState({
+    service: '',
+    date: '',
+    time: '',
+    name: '',
+    phone: '',
+    email: '',
+    notes: ''
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      await createAppointment.mutateAsync({ data: values });
-      setIsSuccess(true);
-    } catch (error) {
-      console.error(error);
-    }
+  const selectedService = services?.find(s => s.name === formData.service);
+
+  const handleNext = () => setStep(s => Math.min(s + 1, 4));
+  const handleBack = () => setStep(s => Math.max(s - 1, 1));
+
+  const handleSubmit = () => {
+    createAppointment.mutate({
+      data: {
+        service: formData.service,
+        date: formData.date,
+        time: formData.time,
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email || undefined,
+        notes: formData.notes || undefined
+      }
+    }, {
+      onSuccess: () => {
+        setStep(4);
+      }
+    });
   };
 
-  const nextStep = async () => {
-    const fields = step === 1 ? ['service', 'stylist'] as const
-                 : step === 2 ? ['date', 'time'] as const
-                 : [];
-    
-    const valid = await form.trigger(fields);
-    if (valid) setStep(s => s + 1);
+  const handleWhatsApp = () => {
+    const msg = `Hi Mr Farrukh, I would like to confirm my booking for ${formData.service} on ${formData.date} at ${formData.time}. My name is ${formData.name}.`;
+    window.open(`https://wa.me/923477268791?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
-  const services = ['Signature Haircut', 'Hair & Beard Combo', 'Hydra Facial', 'Full Body Massage', 'Hair Coloring', 'Bridal/Party Grooming'];
-  const times = ['10:00 AM', '11:00 AM', '12:00 PM', '01:30 PM', '03:00 PM', '04:30 PM', '06:00 PM', '07:30 PM'];
-  const dates = Array.from({length: 7}).map((_, i) => addDays(new Date(), i));
-
-  if (isSuccess) {
-    return (
-      <div className="w-full min-h-screen pt-32 pb-24 bg-black flex items-center justify-center px-4">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="max-w-md w-full bg-[#111] border border-primary/30 p-10 text-center relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1 bg-primary"></div>
-          <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 text-primary">
-            <Check size={40} />
-          </div>
-          <h2 className="font-serif text-3xl text-white mb-4">Reservation Confirmed</h2>
-          <p className="text-muted-foreground text-sm mb-8 leading-relaxed">
-            Your appointment has been secured. Our concierge will contact you shortly to confirm the details.
-          </p>
-          <a 
-            href={`https://wa.me/923477268791?text=Hi, I just booked an appointment for ${form.getValues('service')} on ${form.getValues('date')} at ${form.getValues('time')}. Name: ${form.getValues('name')}`}
-            target="_blank" rel="noreferrer"
-            className="block w-full py-4 bg-[#25D366] text-white text-sm uppercase tracking-widest font-semibold hover:bg-[#128C7E] transition-colors"
-          >
-            Confirm on WhatsApp
-          </a>
-        </motion.div>
-      </div>
-    );
-  }
+  const timeSlots = ["10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM", "08:00 PM"];
 
   return (
-    <div className="w-full pt-32 pb-24 bg-[#050505] min-h-screen">
-      <div className="container mx-auto px-4 max-w-4xl">
-        <div className="text-center mb-16">
-          <h1 className="font-serif text-4xl md:text-5xl text-white font-bold mb-4">Secure Your Session</h1>
-          <p className="text-muted-foreground text-sm uppercase tracking-[0.2em]">Step into perfection.</p>
-        </div>
+    <div className="pt-40 pb-24 px-6 max-w-4xl mx-auto w-full min-h-screen">
+      <div className="text-center mb-20">
+        <h1 className="font-serif text-5xl md:text-7xl mb-6">Reserve Your Time</h1>
+        <p className="text-secondary text-lg font-light">Secure your appointment for a premium grooming experience.</p>
+      </div>
 
-        {/* Progress */}
-        <div className="flex justify-between items-center mb-12 relative">
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-[1px] bg-[#1A1A1A] z-0"></div>
-          <div 
-            className="absolute left-0 top-1/2 -translate-y-1/2 h-[1px] bg-primary z-0 transition-all duration-500"
-            style={{ width: `${((step - 1) / 2) * 100}%` }}
-          ></div>
-          
-          {[1,2,3].map(i => (
-            <div key={i} className={`relative z-10 w-10 h-10 flex items-center justify-center rounded-full border-2 transition-colors ${
-              step >= i ? 'bg-primary border-primary text-black' : 'bg-[#111] border-[#1A1A1A] text-muted-foreground'
-            }`}>
-              {step > i ? <Check size={16} /> : <span className="font-serif text-sm font-bold">{i}</span>}
+      <div className="glass-panel rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden shadow-2xl">
+        {/* Progress bar */}
+        <div className="flex justify-between items-center mb-16 relative z-10">
+          {[1, 2, 3, 4].map(num => (
+            <div key={num} className="flex flex-col items-center relative z-10 bg-background/50 backdrop-blur-sm rounded-full p-2">
+              <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-500 ${step >= num ? 'bg-primary text-white shadow-[0_0_20px_rgba(28,78,216,0.5)]' : 'bg-white/5 text-secondary border border-white/10'}`}>
+                {step > num ? <CheckCircle2 size={24} /> : num}
+              </div>
             </div>
           ))}
+          <div className="absolute top-1/2 -translate-y-1/2 left-8 right-8 h-px bg-white/10 -z-10" />
+          <div className="absolute top-1/2 -translate-y-1/2 left-8 h-px bg-primary transition-all duration-700 ease-in-out -z-10 shadow-[0_0_10px_rgba(28,78,216,0.5)]" style={{ width: `${(step - 1) * 33.33}%` }} />
         </div>
 
-        {/* Form Container */}
-        <div className="bg-[#0A0A0A] border border-primary/20 p-6 md:p-12 shadow-2xl relative">
-          {/* Corner accents */}
-          <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-primary"></div>
-          <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-primary"></div>
-          <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-primary"></div>
-          <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-primary"></div>
+        <div className="min-h-[400px]">
+          <AnimatePresence mode="wait">
+            {step === 1 && (
+              <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }} className="space-y-8">
+                <h2 className="font-serif text-3xl mb-8 text-foreground text-center">Select a Service</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto pr-4 custom-scrollbar">
+                  {services?.map(service => (
+                    <button
+                      key={service.id}
+                      onClick={() => { setFormData({...formData, service: service.name}); handleNext(); }}
+                      className={`text-left p-6 rounded-2xl border transition-all duration-300 ${formData.service === service.name ? 'bg-primary/20 border-primary shadow-[0_0_20px_rgba(28,78,216,0.2)]' : 'bg-white/5 border-white/10 hover:border-white/30 hover:bg-white/10'}`}
+                    >
+                      <h3 className="font-serif text-xl text-foreground mb-2">{service.name}</h3>
+                      <p className="text-sm text-secondary font-light">{service.category}</p>
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
 
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <AnimatePresence mode="wait">
-              {step === 1 && (
-                <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                  <h3 className="font-serif text-2xl text-white mb-6 flex items-center gap-3"><Scissors className="text-primary"/> Select Service</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {services.map(s => (
-                      <div 
-                        key={s}
-                        onClick={() => form.setValue('service', s)}
-                        className={`p-4 border cursor-pointer transition-all ${
-                          form.watch('service') === s ? 'border-primary bg-primary/5 text-primary' : 'border-[#1A1A1A] text-muted-foreground hover:border-primary/30'
-                        }`}
-                      >
-                        <span className="text-sm uppercase tracking-widest">{s}</span>
-                      </div>
-                    ))}
+            {step === 2 && (
+              <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }} className="space-y-10">
+                <h2 className="font-serif text-3xl mb-8 text-foreground text-center">Choose Date & Time</h2>
+                
+                <div className="max-w-xl mx-auto space-y-10">
+                  <div>
+                    <label className="text-xs font-bold tracking-widest uppercase text-secondary mb-4 flex items-center gap-3"><Calendar size={18} className="text-primary"/> Select Date</label>
+                    <input 
+                      type="date" 
+                      min={new Date().toISOString().split('T')[0]}
+                      value={formData.date}
+                      onChange={e => setFormData({...formData, date: e.target.value})}
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-lg text-foreground focus:outline-none focus:border-primary transition-colors"
+                      style={{ colorScheme: 'dark' }}
+                    />
                   </div>
-                  {form.formState.errors.service && <p className="text-red-500 text-xs mt-2">{form.formState.errors.service.message}</p>}
-                </motion.div>
-              )}
 
-              {step === 2 && (
-                <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                  <h3 className="font-serif text-2xl text-white mb-6 flex items-center gap-3"><Calendar className="text-primary"/> Date & Time</h3>
+                  <AnimatePresence>
+                    {formData.date && (
+                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}>
+                        <label className="text-xs font-bold tracking-widest uppercase text-secondary mb-4 flex items-center gap-3"><Clock size={18} className="text-primary"/> Select Time</label>
+                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                          {timeSlots.map(time => (
+                            <button
+                              key={time}
+                              onClick={() => setFormData({...formData, time})}
+                              className={`py-4 rounded-xl text-sm font-medium transition-all duration-300 ${formData.time === time ? 'bg-primary text-white shadow-[0_0_15px_rgba(28,78,216,0.3)]' : 'bg-white/5 border border-white/10 text-secondary hover:border-white/30 hover:bg-white/10'}`}
+                            >
+                              {time}
+                            </button>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  <div className="flex gap-4 pt-8">
+                    <button onClick={handleBack} className="px-10 py-5 rounded-full text-xs font-bold tracking-widest uppercase glass-panel text-foreground hover:bg-white/10 transition-colors">Back</button>
+                    <button 
+                      onClick={handleNext} 
+                      disabled={!formData.date || !formData.time}
+                      className="flex-1 bg-primary text-white px-10 py-5 rounded-full text-xs font-bold tracking-widest uppercase disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(28,78,216,0.3)] transition-all"
+                    >
+                      Continue <ChevronRight size={18} />
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {step === 3 && (
+              <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }} className="space-y-8 max-w-2xl mx-auto">
+                <h2 className="font-serif text-3xl mb-8 text-foreground text-center flex items-center justify-center gap-3"><User size={28} className="text-primary"/> Contact Details</h2>
+                
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs font-bold tracking-widest uppercase text-secondary mb-3">Full Name</label>
+                      <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-foreground focus:outline-none focus:border-primary transition-colors" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold tracking-widest uppercase text-secondary mb-3">Phone</label>
+                      <input type="tel" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-foreground focus:outline-none focus:border-primary transition-colors" />
+                    </div>
+                  </div>
                   
-                  <div className="mb-8 overflow-x-auto pb-4 custom-scrollbar">
-                    <div className="flex gap-4 w-max">
-                      {dates.map((d, i) => {
-                        const dateStr = format(d, 'yyyy-MM-dd');
-                        return (
-                          <div 
-                            key={i}
-                            onClick={() => form.setValue('date', dateStr)}
-                            className={`flex flex-col items-center justify-center p-4 min-w-[80px] border cursor-pointer transition-all ${
-                              form.watch('date') === dateStr ? 'border-primary bg-primary text-black' : 'border-[#1A1A1A] text-muted-foreground hover:border-primary/30'
-                            }`}
-                          >
-                            <span className="text-xs uppercase tracking-widest mb-1">{format(d, 'EEE')}</span>
-                            <span className="font-serif text-2xl font-bold">{format(d, 'd')}</span>
-                            <span className="text-[10px] uppercase tracking-widest">{format(d, 'MMM')}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase text-secondary mb-3">Email (Optional)</label>
+                    <input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-foreground focus:outline-none focus:border-primary transition-colors" />
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    {times.map(t => (
-                      <div 
-                        key={t}
-                        onClick={() => form.setValue('time', t)}
-                        className={`p-3 text-center border cursor-pointer transition-all ${
-                          form.watch('time') === t ? 'border-primary bg-primary/10 text-primary' : 'border-[#1A1A1A] text-muted-foreground hover:border-primary/30'
-                        }`}
-                      >
-                        <span className="text-xs uppercase tracking-widest flex items-center justify-center gap-2"><Clock size={12}/>{t}</span>
-                      </div>
-                    ))}
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase text-secondary mb-3">Special Requests</label>
+                    <textarea rows={3} value={formData.notes} onChange={e => setFormData({...formData, notes: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-foreground focus:outline-none focus:border-primary resize-none transition-colors" />
                   </div>
-                  {(form.formState.errors.date || form.formState.errors.time) && <p className="text-red-500 text-xs mt-4">Please select both date and time.</p>}
-                </motion.div>
-              )}
+                </div>
 
-              {step === 3 && (
-                <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                  <h3 className="font-serif text-2xl text-white mb-6 flex items-center gap-3"><User className="text-primary"/> Personal Details</h3>
-                  <div className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-2">Full Name *</label>
-                        <input {...form.register('name')} className="w-full bg-[#111] border border-[#1A1A1A] text-white p-4 focus:border-primary focus:outline-none transition-colors" placeholder="John Doe" />
-                        {form.formState.errors.name && <p className="text-red-500 text-xs mt-1">{form.formState.errors.name.message}</p>}
-                      </div>
-                      <div>
-                        <label className="block text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-2">Phone Number *</label>
-                        <input {...form.register('phone')} className="w-full bg-[#111] border border-[#1A1A1A] text-white p-4 focus:border-primary focus:outline-none transition-colors" placeholder="0300 1234567" />
-                        {form.formState.errors.phone && <p className="text-red-500 text-xs mt-1">{form.formState.errors.phone.message}</p>}
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-2">Email Address (Optional)</label>
-                      <input {...form.register('email')} className="w-full bg-[#111] border border-[#1A1A1A] text-white p-4 focus:border-primary focus:outline-none transition-colors" placeholder="john@example.com" />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-2">Special Requests (Optional)</label>
-                      <textarea {...form.register('notes')} rows={3} className="w-full bg-[#111] border border-[#1A1A1A] text-white p-4 focus:border-primary focus:outline-none transition-colors" placeholder="Any specific requirements..."></textarea>
-                    </div>
+                <div className="p-6 bg-primary/10 border border-primary/20 rounded-2xl mt-8">
+                  <h4 className="font-serif text-xl text-primary mb-4">Booking Summary</h4>
+                  <div className="space-y-2">
+                    <p className="text-secondary text-sm flex justify-between"><span>Service:</span> <span className="text-foreground font-medium">{selectedService?.name}</span></p>
+                    <p className="text-secondary text-sm flex justify-between"><span>Date:</span> <span className="text-foreground font-medium">{formData.date}</span></p>
+                    <p className="text-secondary text-sm flex justify-between"><span>Time:</span> <span className="text-foreground font-medium">{formData.time}</span></p>
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                </div>
 
-            {/* Navigation Buttons */}
-            <div className="pt-8 border-t border-[#1A1A1A] flex justify-between">
-              {step > 1 ? (
-                <button type="button" onClick={() => setStep(s => s - 1)} className="px-6 py-3 text-xs uppercase tracking-widest text-muted-foreground hover:text-white transition-colors">
-                  Go Back
-                </button>
-              ) : <div></div>}
+                <div className="flex gap-4 pt-6">
+                  <button onClick={handleBack} className="px-10 py-5 rounded-full text-xs font-bold tracking-widest uppercase glass-panel text-foreground hover:bg-white/10 transition-colors">Back</button>
+                  <button 
+                    onClick={handleSubmit} 
+                    disabled={!formData.name || !formData.phone || createAppointment.isPending}
+                    className="flex-1 bg-primary text-white px-10 py-5 rounded-full text-xs font-bold tracking-widest uppercase disabled:opacity-50 hover:bg-primary/90 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(28,78,216,0.4)] transition-all"
+                  >
+                    {createAppointment.isPending ? 'Processing...' : 'Confirm Booking'}
+                  </button>
+                </div>
+              </motion.div>
+            )}
 
-              {step < 3 ? (
-                <button type="button" onClick={nextStep} className="px-8 py-3 bg-primary text-black text-xs uppercase tracking-widest font-semibold hover:bg-accent transition-colors flex items-center gap-2">
-                  Continue <ChevronRight size={16} />
-                </button>
-              ) : (
-                <button type="submit" disabled={createAppointment.isPending} className="px-10 py-3 bg-primary text-black text-xs uppercase tracking-widest font-semibold hover:bg-accent transition-all shadow-[0_0_20px_rgba(201,168,76,0.3)] disabled:opacity-50">
-                  {createAppointment.isPending ? 'Confirming...' : 'Confirm Booking'}
-                </button>
-              )}
-            </div>
-          </form>
+            {step === 4 && (
+              <motion.div key="step4" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-16 space-y-8 max-w-md mx-auto">
+                <div className="w-32 h-32 bg-emerald-500/10 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-8 border border-emerald-500/20">
+                  <CheckCircle2 size={64} />
+                </div>
+                <h2 className="font-serif text-4xl text-foreground">Request Received</h2>
+                <p className="text-secondary text-lg font-light leading-relaxed">Your booking request has been submitted successfully. Please confirm via WhatsApp to finalize your appointment.</p>
+                
+                <div className="pt-10">
+                  <button 
+                    onClick={handleWhatsApp}
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white px-10 py-5 rounded-full text-xs font-bold tracking-widest uppercase shadow-[0_0_30px_rgba(5,150,105,0.4)] flex items-center justify-center gap-3 transition-all"
+                  >
+                    Confirm on WhatsApp
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>
