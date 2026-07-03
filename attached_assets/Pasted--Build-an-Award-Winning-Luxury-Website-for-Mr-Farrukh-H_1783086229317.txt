@@ -1,0 +1,611 @@
+# Build an Award-Winning Luxury Website for Mr Farrukh Hair Saloon
+
+Create a world-class premium luxury website for
+
+MR FARRUKH HAIR SALOON
+
+Tagline
+
+Islamabad's Leading Luxury Saloon for Ladies & Gents
+
+The website should look like a premium international luxury salon brand similar to Toni & Guy, Sassoon, Aveda, Dyson Beauty, and Louis Vuitton.
+
+This must NOT look like a normal Pakistani salon website.
+
+It should immediately give visitors the feeling of luxury, trust, elegance, professionalism, and premium service.
+
+The entire website should be fully responsive, lightning fast, SEO optimized, AI-powered, and conversion focused.
+
+--------------------------------------
+
+TECH STACK
+
+Next.js 15
+
+React
+
+TypeScript
+
+Tailwind CSS
+
+Framer Motion
+
+GSAP Premium Animations
+
+Lenis Smooth Scroll
+
+Three.js Hero Effects
+
+Glassmorphism
+
+Modern UI
+
+SEO Ready
+
+Schema Markup
+
+Performance Optimized
+
+PWA Support
+
+--------------------------------------
+
+COLOR PALETTE
+
+Matte Black
+
+Luxury Gold
+
+Dark Charcoal
+
+Soft White
+
+Premium Beige
+
+Elegant Typography
+
+--------------------------------------
+
+HERO SECTION
+
+Use a cinematic fullscreen luxury salon video background with elegant slow-motion scenes of hair styling, luxury interiors, premium grooming, makeup, and beauty services.
+
+Large Premium Heading
+
+Experience Luxury.
+Experience Perfection.
+
+Sub Heading
+
+Islamabad's Leading Luxury Saloon for Ladies & Gents
+
+Buttons
+
+Book Appointment
+
+WhatsApp Booking
+
+Explore Services
+
+Luxury scroll animation
+
+Parallax effects
+
+Floating particles
+
+Premium loading animation
+
+Glass navigation
+
+--------------------------------------
+
+NAVIGATION
+
+Logo
+
+Home
+
+About
+
+Services
+
+Price List
+
+Gallery
+
+Hair Experts
+
+Bridal
+
+Skin Care
+
+Book Appointment
+
+Reviews
+
+Contact
+
+--------------------------------------
+
+ABOUT SECTION
+
+Tell the story of Mr Farrukh Hair Saloon.
+
+Explain that the salon delivers premium grooming experiences for ladies and gentlemen using international products, experienced stylists, and luxury customer care.
+
+Mission
+
+Vision
+
+Experience
+
+Professional Staff
+
+Premium Products
+
+Luxury Environment
+
+--------------------------------------
+
+SERVICES SECTION
+
+Beautiful animated service cards.
+
+Hair Services
+
+Hair Cut
+
+Kids Hair Cut
+
+Hair Styling
+
+Fiber Styling
+
+Hair Do
+
+Beard
+
+Beard Cleansing
+
+Beard Coloring
+
+Protein Treatment
+
+Dandruff Control
+
+Shine Enhance
+
+Hair Botox
+
+Hair Keratin
+
+Hair Perming
+
+Hair Coloring
+
+Facials
+
+Hydra Facial
+
+HI Lift
+
+Dr Derma
+
+Thalgo
+
+Janssen
+
+Dermaclear
+
+Dermacos
+
+Massage
+
+Head
+
+Shoulder
+
+Back
+
+Full Upper
+
+Wax
+
+Cheeks
+
+Forehead
+
+Ear
+
+Neck
+
+Full Face Wax
+
+Nail Care
+
+Manicure
+
+Pedicure
+
+Party Grooming
+
+Every card should have
+
+Hover animation
+
+Luxury icons
+
+Book Now button
+
+--------------------------------------
+
+PRICE LIST
+
+Create an elegant interactive pricing page.
+
+Use the uploaded price list image as reference.
+
+Organize everything into categories.
+
+Hair
+
+Skin
+
+Massage
+
+Wax
+
+Nails
+
+Coloring
+
+Treatments
+
+Customers should be able to search services.
+
+Beautiful premium pricing cards.
+
+--------------------------------------
+
+GALLERY
+
+Luxury Masonry Layout
+
+Before & After
+
+Hair Transformation
+
+Salon Interior
+
+Hair Coloring
+
+Bridal Makeup
+
+Clients
+
+Videos
+
+Instagram Feed
+
+Lightbox
+
+Lazy Loading
+
+--------------------------------------
+
+BOOK APPOINTMENT
+
+Premium booking portal.
+
+Customer selects
+
+Service
+
+Date
+
+Time
+
+Stylist
+
+Phone
+
+Name
+
+Notes
+
+Confirmation page
+
+Booking confirmation email
+
+--------------------------------------
+
+WHATSAPP BOOKING
+
+Integrate WhatsApp booking.
+
+WhatsApp Number
+
++92 347 7268791
+
+Clicking Book on WhatsApp should automatically open WhatsApp with a beautifully formatted booking message.
+
+Example
+
+Hello Mr Farrukh Hair Saloon,
+I would like to book an appointment.
+
+Name:
+Phone:
+Preferred Service:
+Preferred Date:
+Preferred Time:
+
+--------------------------------------
+
+AI RECEPTIONIST
+
+Floating AI Assistant available on every page.
+
+The AI should answer
+
+Location
+
+Opening Hours
+
+Hair Services
+
+Facials
+
+Price
+
+Hair Coloring
+
+Wax
+
+Massage
+
+Products
+
+Booking Process
+
+Parking
+
+Phone Numbers
+
+WhatsApp
+
+Directions
+
+The AI should suggest relevant services based on customer questions.
+
+Examples
+
+"I have damaged hair."
+
+→ Recommend Keratin + Protein Treatment
+
+"I want a bridal package."
+
+→ Show Bridal Services
+
+"I want hair color."
+
+→ Show available brands
+
+The chatbot should support
+
+Typing
+
+Voice Input
+
+Voice Output
+
+Instant replies
+
+Quick suggestion buttons
+
+--------------------------------------
+
+AI BEAUTY CONSULTANT
+
+Customers upload a selfie.
+
+AI recommends
+
+Haircut
+
+Hair Color
+
+Beard Style
+
+Facial
+
+Skin Treatment
+
+Hair Care
+
+Luxury recommendation cards.
+
+--------------------------------------
+
+GOOGLE MAP
+
+Show premium interactive Google Map.
+
+Location
+
+Ground Floor
+Winston Mall
+D-Block
+B-17
+Islamabad
+
+Include
+
+Directions
+
+Parking
+
+Nearby Landmarks
+
+--------------------------------------
+
+CONTACT
+
+Phone
+
+0320-5814165
+
+0347-7268791
+
+WhatsApp
+
++92 347 7268791
+
+Contact Form
+
+Name
+
+Phone
+
+Email
+
+Service
+
+Message
+
+--------------------------------------
+
+TESTIMONIALS
+
+Luxury glass cards
+
+5-Star Reviews
+
+Video testimonials
+
+Animated slider
+
+--------------------------------------
+
+TEAM
+
+Premium stylist cards
+
+Photo
+
+Experience
+
+Specialization
+
+Languages
+
+Book Appointment
+
+--------------------------------------
+
+SPECIAL FEATURES
+
+Dark Mode
+
+Back To Top
+
+Page Progress Bar
+
+Sticky Navigation
+
+Floating WhatsApp
+
+Floating Call Button
+
+Instagram Feed
+
+Google Reviews
+
+Newsletter
+
+SEO Optimization
+
+Schema Markup
+
+Accessibility
+
+Fast Loading
+
+Image Optimization
+
+Lazy Loading
+
+Smooth Page Transition
+
+Animated Cursor
+
+Micro Interactions
+
+Luxury Hover Effects
+
+Glassmorphism
+
+Premium Typography
+
+--------------------------------------
+
+FOOTER
+
+Logo
+
+Quick Links
+
+Working Hours
+
+Phone Numbers
+
+WhatsApp
+
+Email
+
+Google Maps
+
+Facebook
+
+Instagram
+
+Copyright
+
+--------------------------------------
+
+ADMIN PANEL
+
+Manage Services
+
+Manage Prices
+
+Manage Gallery
+
+Manage Bookings
+
+Manage Testimonials
+
+Manage Staff
+
+Manage AI Responses
+
+Manage Contact Requests
+
+Manage Homepage Content
+
+--------------------------------------
+
+GOAL
+
+The final website should look like a luxury international salon brand worth $10,000+.
+
+Every page should feel premium.
+
+Every animation should be smooth.
+
+Every button should have micro interactions.
+
+The website should be mobile-first, SEO optimized, AI-powered, WhatsApp integrated, booking-enabled, visually stunning, and professionally designed to impress high-end clients immediately.
+
+Use the uploaded price list image to accurately populate the Services and Pricing sections, while presenting them in a modern, elegant, categorized layout rather than as a simple image.
