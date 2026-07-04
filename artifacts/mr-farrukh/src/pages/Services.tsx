@@ -1,67 +1,68 @@
 import { motion } from 'framer-motion';
-import { useListServices } from '@workspace/api-client-react';
 import { Link } from 'wouter';
+import { Scissors, Sparkles, Leaf, Palette, Zap, Waves, Sun, Hand, Flame, Star, Crown } from 'lucide-react';
+
+const CATEGORIES = [
+  { name: 'Hair Services', icon: Scissors, description: 'Precision haircuts crafted to suit your face shape, lifestyle, and personal style — from classic cuts to contemporary transformations' },
+  { name: 'Hair Styling', icon: Sparkles, description: 'From sleek blowouts to textured event looks, our stylists sculpt each strand with intention' },
+  { name: 'Hair Treatments', icon: Leaf, description: 'Restorative protein doses, dandruff control, and shine-enhancement treatments to repair and revitalize' },
+  { name: 'Hair Coloring', icon: Palette, description: "Expert color application — Revlon, L'Oréal, Keune, Garnier and more — tailored to your natural tone" },
+  { name: 'Texture Services', icon: Zap, description: 'Botox and Keratin treatments that eliminate frizz and restore silk-smooth texture for months' },
+  { name: 'Perm Services', icon: Waves, description: 'Long-lasting curl and wave definition using professional perming techniques' },
+  { name: 'Facials', icon: Sparkles, description: 'From Hydra Facial to Thalgo and Janssen — advanced skin science delivered by certified therapists' },
+  { name: 'Skin Care', icon: Sun, description: 'Polishers, masks, and medicated skin treatments personalized to your skin type' },
+  { name: 'Massage', icon: Hand, description: 'Head, shoulder, back, and full upper body massage to melt away tension' },
+  { name: 'Waxing', icon: Flame, description: 'Precise, gentle waxing for face and body — cheeks, forehead, neck, and full face' },
+  { name: 'Nail Care', icon: Star, description: 'Professional manicure and pedicure with meticulous attention to detail' },
+  { name: 'Party Grooming', icon: Crown, description: 'Complete pre-event cleansing, scrubbing, and grooming package to look and feel your absolute best' },
+];
 
 export default function Services() {
-  const { data: services, isLoading } = useListServices();
-
-  const categories = Array.from(new Set(services?.map(s => s.category) || []));
-
   return (
-    <div className="pt-40 pb-24 px-6 max-w-7xl mx-auto w-full min-h-screen">
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center max-w-3xl mx-auto mb-24"
-      >
-        <h1 className="font-serif text-5xl md:text-7xl mb-6">Our Services</h1>
-        <p className="text-secondary text-lg font-light">Curated treatments delivered with uncompromising precision and care.</p>
-      </motion.div>
+    <div className="w-full min-h-[100dvh]">
+      {/* Hero */}
+      <section className="relative pt-40 pb-24 px-4 sm:px-6 lg:px-8 text-center max-w-4xl mx-auto overflow-hidden">
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+          <h1 className="font-serif text-4xl md:text-6xl mb-6 text-foreground text-gradient">The Art of Grooming</h1>
+          <p className="text-secondary text-lg max-w-2xl mx-auto font-light mb-10 leading-relaxed">
+            Curated treatments delivered with uncompromising precision and care. Explore our comprehensive portfolio of premium services designed to elevate your personal style.
+          </p>
+          <Link href="/book" className="inline-flex items-center justify-center bg-primary text-white px-10 h-14 rounded-full text-xs font-bold tracking-widest uppercase hover:bg-primary/90 transition-all shadow-[0_0_30px_rgba(28,78,216,0.4)]">
+            Reserve Your Time
+          </Link>
+        </motion.div>
+      </section>
 
-      {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-96 bg-card rounded-3xl animate-pulse" />
-          ))}
+      {/* Grid */}
+      <section className="pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
+          {CATEGORIES.map((cat, i) => {
+            const Icon = cat.icon;
+            return (
+              <motion.div
+                key={cat.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: (i % 4) * 0.1, duration: 0.6 }}
+                className="glass-panel p-8 rounded-3xl flex flex-col group hover:-translate-y-2 transition-all duration-500 hover:border-primary/40 hover:shadow-[0_0_40px_rgba(28,78,216,0.15)]"
+              >
+                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-6 text-secondary group-hover:text-primary group-hover:bg-primary/10 transition-colors duration-500">
+                  <Icon size={24} strokeWidth={1.5} />
+                </div>
+                <h3 className="font-serif text-2xl mb-4 text-foreground">{cat.name}</h3>
+                <p className="text-secondary text-sm flex-1 mb-8 leading-relaxed font-light">{cat.description}</p>
+                <div className="mt-auto pt-6 border-t border-white/5">
+                  <Link href="/pricing" className="text-primary text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors flex items-center gap-2">
+                    View Pricing
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  </Link>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
-      ) : (
-        <div className="space-y-32">
-          {categories.map((category) => (
-            <div key={category}>
-              <h2 className="font-serif text-4xl mb-12 border-b border-white/10 pb-6 text-foreground">{category}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {services?.filter(s => s.category === category).map((service, i) => (
-                  <motion.div
-                    key={service.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: (i % 3) * 0.1 }}
-                    className="glass-panel rounded-3xl p-8 flex flex-col group hover:border-primary/50 transition-colors"
-                  >
-                    <div className="h-56 rounded-2xl overflow-hidden mb-8 relative">
-                      <div className="absolute inset-0 bg-primary/20 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      <img 
-                        src={service.imageUrl || "https://images.unsplash.com/photo-1620331311520-24c4d245d104?q=80&w=800"} 
-                        alt={service.name} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      />
-                    </div>
-                    <h3 className="font-serif text-2xl mb-4 text-foreground">{service.name}</h3>
-                    <p className="text-secondary text-sm flex-1 mb-8 leading-relaxed font-light">{service.description}</p>
-                    <div className="flex justify-between items-center mt-auto pt-6 border-t border-white/10">
-                      <span className="text-lg font-medium text-foreground">{service.category}</span>
-                      <Link href={`/book?service=${service.id}`} className="text-primary text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors">
-                        Book Now
-                      </Link>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      </section>
     </div>
   );
 }
