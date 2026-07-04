@@ -1,0 +1,139 @@
+Final Improvements Required
+
+Overall, the website looks fantastic and the premium feel is exactly what I was aiming for. The UI, animations, layout, and overall experience are excellent. There are just a few final improvements that need to be completed before the project is considered finished.
+
+1. Update the Pricing Data
+
+Please replace the current pricing with the following exact services and prices. These prices should be displayed everywhere the pricing section is used.
+
+Hair
+Haircut
+Regular Hair Cut (Wash & Styling) — 1300/-
+Kids Hair Cut — 700/-
+Styles
+Regular Styling — 500/-
+Fiber Styling — 500/-
+Hair-Do — 500/-
+Beard
+Beard — 700/-
+Cleansing & Scrubbing — 1500/-
+Beard Coloring
+Keune — 1500/-
+L'Oréal — 1500/-
+Just For Men — 1500/-
+Treatments
+Protein Dose — 3000/-
+Dandruff Control — 3000/-
+Shine Enhance — 3500/-
+Texture Services
+Long Hair Botox — 18000/-
+Top Hair Botox — 10000/-
+Long Hair Keratin — 18000/-
+Top Hair Keratin — 10000/-
+Perms Services
+Long Hair Perming — 12000/-
+Top Hair Perming — 8000/-
+Hair Coloring
+Revlon — 2000/-
+G.K — 2000/-
+Olivia — 1200/-
+Adore — 1200/-
+Garnier — 2000/-
+L'Oréal — 2000/-
+Just For Men — 2500/-
+Apple — 2000/-
+Keune — 2500/-
+Skins
+Facial
+Hydra Facial — 12000/-
+HI Lift — 5000/-
+Dr. Derma — 7000/-
+Thalgo — 8000/-
+Janssen — 10000/-
+Dermaclear Medicated — 8000/-
+Skin Care — 4000/-
+Dermacos — 7000/-
+Polisher
+Face — 1000/-
+Arms — 1500/-
+Hands — 1000/-
+Feet — 2000/-
+Neck — 1000/-
+Black Mask — 500/-
+Mud Mask — 500/-
+Massage
+Head — 500/-
+Shoulder — 500/-
+Back — 500/-
+Full Upper — 1000/-
+Nail Care
+Manicure / Pedicure — 5000/-
+Grooming
+Party Grooming (Cleansing & Scrubbing) — 4000/-
+Wax
+Cheeks — 500/-
+Forehead — 500/-
+Ear — 500/-
+Neck — 1000/-
+Full Face Wax — 1000/-
+2. AI Assistant Knowledge Base
+
+Please improve the AI Assistant so it behaves like a real salon receptionist instead of giving generic answers.
+
+It should be trained using all the information available on the website, including:
+
+All salon services
+Complete pricing list
+Business information
+Contact details
+WhatsApp booking process
+Address
+Opening hours
+Gallery information
+Reservation process
+Frequently asked questions
+Hair services
+Skin treatments
+Grooming services
+Promotions (if available)
+
+The AI assistant should always answer questions using the actual information from the website.
+
+For example, if a visitor asks:
+
+"What is the price of a Hydra Facial?"
+"How much is a haircut?"
+"Do you offer beard coloring?"
+"What services do you provide?"
+"Do you have keratin treatment?"
+"What are your opening hours?"
+"Where is the salon located?"
+"How can I book an appointment?"
+"Do you offer manicure and pedicure?"
+"What facial treatments are available?"
+
+The assistant should immediately provide the correct answer using the exact pricing and service information listed above.
+
+It should never invent prices or make assumptions. If a service is not available, it should politely inform the customer instead of generating incorrect information.
+
+3. Improve the AI Experience
+
+Make the AI assistant more natural, friendly, and professional.
+
+It should greet visitors warmly, recommend suitable services when appropriate, answer confidently, and encourage customers to book an appointment through the reservation form or WhatsApp.
+
+The goal is for it to feel like a premium salon receptionist available 24/7.
+
+4. Cursor Styling
+
+One small design improvement:
+
+The custom cursor currently feels a bit too exaggerated and distracting.
+
+Please redesign it to be much cleaner, smoother, and more elegant so it complements the premium luxury aesthetic instead of drawing too much attention.
+
+The cursor should feel subtle, modern, and sophisticated.
+
+Final Note
+
+Everything else looks absolutely fantastic. The design quality, animations, responsiveness, and overall premium experience are excellent. These are just the final refinements needed to make the website production-ready and deliver a truly high-end salon experience.
