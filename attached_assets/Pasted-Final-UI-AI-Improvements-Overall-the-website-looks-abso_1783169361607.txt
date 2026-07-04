@@ -1,0 +1,76 @@
+Final UI & AI Improvements
+
+Overall, the website looks absolutely fantastic. The design, animations, responsiveness, and premium feel are excellent. There are just a few final refinements needed before the project is complete.
+
+1. Floating Action Buttons
+
+Please reorganize the floating action buttons as follows:
+
+Right Side
+
+There should be only two floating buttons on the right side:
+
+Phone Call (keep as it is)
+AI Assistant
+
+For the AI Assistant button:
+
+Replace the current AI icon with a cleaner, more modern, and premium-looking AI icon.
+The icon should better match the luxury aesthetic of the website.
+
+Please remove the WhatsApp button from the right side completely.
+
+Left Side
+
+There should be three floating buttons on the left side:
+
+Instagram
+
+Link:
+https://www.instagram.com/mr_farrukh_salon?igsh=MTlqNjY5d3piODU2
+
+TikTok
+
+Link:
+https://www.tiktok.com/@mr.farrukh.hair.sa?_r=1&_t=ZS-97kbR4n7O0T
+
+WhatsApp
+
+Link directly to:
+
++92 347 7268791
+
+Clicking the WhatsApp button should immediately open a chat with this number.
+
+Styling
+
+Please make sure all floating buttons:
+
+Have consistent sizing.
+Use smooth hover animations.
+Maintain equal spacing.
+Are fully responsive across desktop, tablet, and mobile.
+Match the premium luxury branding of the website.
+2. AI Assistant Pricing Issue
+
+The AI Assistant still has one important issue that needs to be fixed.
+
+Currently, whenever users ask about the price of a service, the AI sometimes provides incorrect or made-up prices.
+
+This should never happen.
+
+The AI Assistant must always use the exact pricing data from the Pricing page as its single source of truth.
+
+For example, if a visitor asks:
+
+"How much is a haircut?"
+"What is the price of Hydra Facial?"
+"How much does Keratin cost?"
+"What is the price of Beard Coloring?"
+"How much is Party Grooming?"
+
+The AI should respond with the exact prices displayed on the Pricing page, without changing, estimating, or inventing any values.
+
+If the pricing page is updated in the future, the AI should automatically reference the updated pricing instead of relying on hardcoded or outdated information.
+
+The AI should always stay synchronized with the website's current pricing data so that customers receive accurate and consistent information at all times.
