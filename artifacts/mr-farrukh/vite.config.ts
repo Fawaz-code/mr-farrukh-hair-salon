@@ -6,9 +6,7 @@ import { defineConfig } from 'vite';
 import runtimeErrorOverlay from '@replit/vite-plugin-runtime-error-modal';
 
 // Default values for Vercel and local development
-const port = Number(process.env.PORT || 5173);
-const basePath = process.env.BASE_PATH || '/';
-
+const port = Number(process.env.PORT || 5173);const basePath = '/';
 export default defineConfig({
   base: basePath,
   plugins: [
