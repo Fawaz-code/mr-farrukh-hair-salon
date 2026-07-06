@@ -1,0 +1,790 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: Mr Farrukh Hair Saloon API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: appointments
+    description: Appointment booking
+  - name: services
+    description: Salon services
+  - name: pricing
+    description: Pricing items
+  - name: gallery
+    description: Gallery images
+  - name: testimonials
+    description: Customer testimonials
+  - name: staff
+    description: Staff members
+  - name: contact
+    description: Contact messages
+  - name: chat
+    description: AI receptionist chat
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  # ─── Appointments ───────────────────────────────────────────────
+  /appointments:
+    get:
+      operationId: listAppointments
+      tags: [appointments]
+      summary: List all appointments
+      responses:
+        "200":
+          description: List of appointments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Appointment"
+    post:
+      operationId: createAppointment
+      tags: [appointments]
+      summary: Book an appointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentInput"
+      responses:
+        "201":
+          description: Appointment booked
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Appointment"
+
+  /appointments/{id}:
+    patch:
+      operationId: updateAppointment
+      tags: [appointments]
+      summary: Update appointment status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Appointment"
+        "404":
+          description: Not found
+    delete:
+      operationId: deleteAppointment
+      tags: [appointments]
+      summary: Delete appointment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Services ───────────────────────────────────────────────────
+  /services:
+    get:
+      operationId: listServices
+      tags: [services]
+      summary: List all services
+      responses:
+        "200":
+          description: List of services
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Service"
+    post:
+      operationId: createService
+      tags: [services]
+      summary: Create a service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ServiceInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Service"
+
+  /services/{id}:
+    patch:
+      operationId: updateService
+      tags: [services]
+      summary: Update a service
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ServiceUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Service"
+    delete:
+      operationId: deleteService
+      tags: [services]
+      summary: Delete a service
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Pricing ────────────────────────────────────────────────────
+  /pricing:
+    get:
+      operationId: listPricing
+      tags: [pricing]
+      summary: List all pricing items
+      responses:
+        "200":
+          description: List of pricing items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PricingItem"
+    post:
+      operationId: createPricingItem
+      tags: [pricing]
+      summary: Create a pricing item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PricingItemInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PricingItem"
+
+  /pricing/{id}:
+    patch:
+      operationId: updatePricingItem
+      tags: [pricing]
+      summary: Update a pricing item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PricingItemUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PricingItem"
+    delete:
+      operationId: deletePricingItem
+      tags: [pricing]
+      summary: Delete a pricing item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Gallery ────────────────────────────────────────────────────
+  /gallery:
+    get:
+      operationId: listGallery
+      tags: [gallery]
+      summary: List gallery items
+      responses:
+        "200":
+          description: Gallery items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GalleryItem"
+    post:
+      operationId: createGalleryItem
+      tags: [gallery]
+      summary: Add gallery item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GalleryItemInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GalleryItem"
+
+  /gallery/{id}:
+    patch:
+      operationId: updateGalleryItem
+      tags: [gallery]
+      summary: Update gallery item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GalleryItemUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GalleryItem"
+    delete:
+      operationId: deleteGalleryItem
+      tags: [gallery]
+      summary: Delete gallery item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Testimonials ───────────────────────────────────────────────
+  /testimonials:
+    get:
+      operationId: listTestimonials
+      tags: [testimonials]
+      summary: List testimonials
+      responses:
+        "200":
+          description: Testimonials
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Testimonial"
+    post:
+      operationId: createTestimonial
+      tags: [testimonials]
+      summary: Create testimonial
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TestimonialInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Testimonial"
+
+  /testimonials/{id}:
+    patch:
+      operationId: updateTestimonial
+      tags: [testimonials]
+      summary: Update testimonial
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TestimonialUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Testimonial"
+    delete:
+      operationId: deleteTestimonial
+      tags: [testimonials]
+      summary: Delete testimonial
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Staff ──────────────────────────────────────────────────────
+  /staff:
+    get:
+      operationId: listStaff
+      tags: [staff]
+      summary: List staff
+      responses:
+        "200":
+          description: Staff members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StaffMember"
+    post:
+      operationId: createStaffMember
+      tags: [staff]
+      summary: Create staff member
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StaffMemberInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffMember"
+
+  /staff/{id}:
+    patch:
+      operationId: updateStaffMember
+      tags: [staff]
+      summary: Update staff member
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StaffMemberUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffMember"
+    delete:
+      operationId: deleteStaffMember
+      tags: [staff]
+      summary: Delete staff member
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Contact ────────────────────────────────────────────────────
+  /contact:
+    get:
+      operationId: listContactMessages
+      tags: [contact]
+      summary: List contact messages
+      responses:
+        "200":
+          description: Contact messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ContactMessage"
+    post:
+      operationId: submitContact
+      tags: [contact]
+      summary: Submit a contact message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactMessageInput"
+      responses:
+        "201":
+          description: Submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactMessage"
+
+  /contact/{id}:
+    delete:
+      operationId: deleteContactMessage
+      tags: [contact]
+      summary: Delete contact message
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Chat / AI Receptionist ─────────────────────────────────────
+  /chat:
+    post:
+      operationId: sendChatMessage
+      tags: [chat]
+      summary: Send a message to the AI receptionist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatMessageInput"
+      responses:
+        "200":
+          description: AI response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatResponse"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required: [status]
+
+    # ─── Appointment ───────────────────────────────────────────────
+    Appointment:
+      type: object
+      required: [id, name, phone, service, date, time, status, createdAt]
+      properties:
+        id:         { type: integer }
+        name:       { type: string }
+        phone:      { type: string }
+        email:      { type: ["string", "null"] }
+        service:    { type: string }
+        stylist:    { type: ["string", "null"] }
+        date:       { type: string }
+        time:       { type: string }
+        notes:      { type: ["string", "null"] }
+        status:     { type: string }
+        createdAt:  { type: string }
+
+    AppointmentInput:
+      type: object
+      required: [name, phone, service, date, time]
+      properties:
+        name:    { type: string }
+        phone:   { type: string }
+        email:   { type: string }
+        service: { type: string }
+        stylist: { type: string }
+        date:    { type: string }
+        time:    { type: string }
+        notes:   { type: string }
+
+    AppointmentUpdate:
+      type: object
+      properties:
+        status:  { type: string }
+        notes:   { type: string }
+
+    # ─── Service ───────────────────────────────────────────────────
+    Service:
+      type: object
+      required: [id, name, category, description]
+      properties:
+        id:          { type: integer }
+        name:        { type: string }
+        category:    { type: string }
+        description: { type: string }
+        imageUrl:    { type: ["string", "null"] }
+        duration:    { type: ["string", "null"] }
+        featured:    { type: boolean }
+
+    ServiceInput:
+      type: object
+      required: [name, category, description]
+      properties:
+        name:        { type: string }
+        category:    { type: string }
+        description: { type: string }
+        imageUrl:    { type: string }
+        duration:    { type: string }
+        featured:    { type: boolean }
+
+    ServiceUpdate:
+      type: object
+      properties:
+        name:        { type: string }
+        category:    { type: string }
+        description: { type: string }
+        imageUrl:    { type: string }
+        duration:    { type: string }
+        featured:    { type: boolean }
+
+    # ─── Pricing ───────────────────────────────────────────────────
+    PricingItem:
+      type: object
+      required: [id, name, category, price]
+      properties:
+        id:       { type: integer }
+        name:     { type: string }
+        category: { type: string }
+        price:    { type: integer }
+        unit:     { type: ["string", "null"] }
+        popular:  { type: boolean }
+
+    PricingItemInput:
+      type: object
+      required: [name, category, price]
+      properties:
+        name:     { type: string }
+        category: { type: string }
+        price:    { type: integer }
+        unit:     { type: string }
+        popular:  { type: boolean }
+
+    PricingItemUpdate:
+      type: object
+      properties:
+        name:     { type: string }
+        category: { type: string }
+        price:    { type: integer }
+        unit:     { type: string }
+        popular:  { type: boolean }
+
+    # ─── Gallery ───────────────────────────────────────────────────
+    GalleryItem:
+      type: object
+      required: [id, imageUrl, category, title]
+      properties:
+        id:        { type: integer }
+        imageUrl:  { type: string }
+        category:  { type: string }
+        title:     { type: string }
+        caption:   { type: ["string", "null"] }
+        featured:  { type: boolean }
+
+    GalleryItemInput:
+      type: object
+      required: [imageUrl, category, title]
+      properties:
+        imageUrl:  { type: string }
+        category:  { type: string }
+        title:     { type: string }
+        caption:   { type: string }
+        featured:  { type: boolean }
+
+    GalleryItemUpdate:
+      type: object
+      properties:
+        imageUrl:  { type: string }
+        category:  { type: string }
+        title:     { type: string }
+        caption:   { type: string }
+        featured:  { type: boolean }
+
+    # ─── Testimonial ───────────────────────────────────────────────
+    Testimonial:
+      type: object
+      required: [id, name, rating, text, service]
+      properties:
+        id:        { type: integer }
+        name:      { type: string }
+        rating:    { type: integer }
+        text:      { type: string }
+        service:   { type: string }
+        avatarUrl: { type: ["string", "null"] }
+        featured:  { type: boolean }
+        createdAt: { type: string }
+
+    TestimonialInput:
+      type: object
+      required: [name, rating, text, service]
+      properties:
+        name:      { type: string }
+        rating:    { type: integer }
+        text:      { type: string }
+        service:   { type: string }
+        avatarUrl: { type: string }
+        featured:  { type: boolean }
+
+    TestimonialUpdate:
+      type: object
+      properties:
+        name:      { type: string }
+        rating:    { type: integer }
+        text:      { type: string }
+        service:   { type: string }
+        avatarUrl: { type: string }
+        featured:  { type: boolean }
+
+    # ─── Staff ─────────────────────────────────────────────────────
+    StaffMember:
+      type: object
+      required: [id, name, role, experience, specializations]
+      properties:
+        id:              { type: integer }
+        name:            { type: string }
+        role:            { type: string }
+        experience:      { type: string }
+        specializations: { type: array, items: { type: string } }
+        languages:       { type: array, items: { type: string } }
+        imageUrl:        { type: ["string", "null"] }
+        bio:             { type: ["string", "null"] }
+
+    StaffMemberInput:
+      type: object
+      required: [name, role, experience, specializations]
+      properties:
+        name:            { type: string }
+        role:            { type: string }
+        experience:      { type: string }
+        specializations: { type: array, items: { type: string } }
+        languages:       { type: array, items: { type: string } }
+        imageUrl:        { type: string }
+        bio:             { type: string }
+
+    StaffMemberUpdate:
+      type: object
+      properties:
+        name:            { type: string }
+        role:            { type: string }
+        experience:      { type: string }
+        specializations: { type: array, items: { type: string } }
+        languages:       { type: array, items: { type: string } }
+        imageUrl:        { type: string }
+        bio:             { type: string }
+
+    # ─── Contact ───────────────────────────────────────────────────
+    ContactMessage:
+      type: object
+      required: [id, name, phone, message, createdAt]
+      properties:
+        id:        { type: integer }
+        name:      { type: string }
+        phone:     { type: string }
+        email:     { type: ["string", "null"] }
+        service:   { type: ["string", "null"] }
+        message:   { type: string }
+        read:      { type: boolean }
+        createdAt: { type: string }
+
+    ContactMessageInput:
+      type: object
+      required: [name, phone, message]
+      properties:
+        name:    { type: string }
+        phone:   { type: string }
+        email:   { type: string }
+        service: { type: string }
+        message: { type: string }
+
+    # ─── Chat ──────────────────────────────────────────────────────
+    ChatMessageInput:
+      type: object
+      required: [message]
+      properties:
+        message: { type: string }
+
+    ChatResponse:
+      type: object
+      required: [reply, suggestions]
+      properties:
+        reply:       { type: string }
+        suggestions: { type: array, items: { type: string } }
+        services:    { type: array, items: { type: string } }
